@@ -1,6 +1,6 @@
 --only-binary=:all:
-streamlit==1.36.0
-pandas==2.2.2
+streamlit==1.38.0
+pandas==3.0.0
 playwright==1.44.0
 jieba==0.42.1
 wordcloud==1.9.3
