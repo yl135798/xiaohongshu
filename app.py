@@ -4,10 +4,22 @@ import jieba
 import time
 import json
 import os
-from datetime import datetime, timedelta
+import requests
+from datetime import datetime
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from playwright.sync_api import sync_playwright
+
+# ====================== 自动下载免费商用中文字体（核心修改）======================
+FONT_URL = "https://github.com/adobe-fonts/source-han-sans/releases/download/2.004R/SourceHanSansSC-Regular.ttf"
+FONT_PATH = "SourceHanSansSC-Regular.ttf"
+
+if not os.path.exists(FONT_PATH):
+    with st.spinner("正在加载系统字体（仅首次运行）..."):
+        response = requests.get(FONT_URL, timeout=30)
+        with open(FONT_PATH, "wb") as f:
+            f.write(response.content)
+# ==============================================================================
 
 # 页面配置
 st.set_page_config(
@@ -255,12 +267,12 @@ with tab2:
             if comments:
                 st.success(f"共获取 {len(comments)} 条评论")
                 
-                # 词云图
+                # 词云图（已自动使用免费商用字体）
                 st.subheader("评论词云")
                 text = " ".join([c["评论内容"] for c in comments])
                 words = jieba.cut(text)
                 wc = WordCloud(
-                    font_path="simhei.ttf",
+                    font_path=FONT_PATH,
                     width=800, height=400,
                     background_color="white"
                 ).generate(" ".join(words))
